@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import Button from './Button';
 
+//! Can def clean this up a bit. See video 100.
+
 export const BillForm = ({ items, selected, onSetBalance, onToggleBill }) => {
 	const [billAmt, setBillAmt] = useState('');
 	const [expense1, setExpense1] = useState('');

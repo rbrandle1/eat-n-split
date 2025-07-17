@@ -27,6 +27,7 @@ const initialFriends = [
 
 const App = () => {
 	// ? Do I really need to pass the entire items object down into BillForm? Or just the .name and .id?
+	//! no! see note above
 	const [items, setItems] = useState(initialFriends);
 	const [selected, setSelected] = useState(null);
 
