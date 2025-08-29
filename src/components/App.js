@@ -21,8 +21,12 @@ const initialFriends = [
 	},
 ];
 
-const Button = ({ children }) => {
-	return <button className='button'>{children}</button>;
+const Button = ({ children, onClick }) => {
+	return (
+		<button className='button' onClick={onClick}>
+			{children}
+		</button>
+	);
 };
 
 const FriendsList = ({ items }) => {
@@ -51,11 +55,13 @@ const Friend = ({ item }) => {
 };
 
 const FormAddFriend = ({ onAdd }) => {
-	// TIP: for random image generation, set a default useState to: 'https://i.pravatar.cc/48'
-	// Create a random id variable like: const id = crypto.randomUUID();
-	// Then, when constructing the new friend object, you can piece the two together like" image: `${image}?=${id}`
 	const [name, setName] = useState('');
 	const [image, setImage] = useState('https://i.pravatar.cc/48');
+	const [isOpen, setIsOpen] = useState(false);
+
+	const handleToggle = () => {
+		setIsOpen((is) => !is);
+	};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -75,31 +81,40 @@ const FormAddFriend = ({ onAdd }) => {
 
 		setName('');
 		setImage('https://i.pravatar.cc/48');
+		setIsOpen(false);
 	};
 
 	return (
 		<>
-			<form className='form-add-friend' onSubmit={handleSubmit}>
-				<label htmlFor='name'>🤷‍♀️ Friend name</label>
-				<input id='name' type='text' placeholder='Add name...' value={name} onChange={(e) => setName(e.target.value)} />
-				<label htmlFor='image'>🌄 Image URL</label>
-				<input
-					id='image'
-					type='text'
-					placeholder='Add url...'
-					value={image}
-					onChange={(e) => setImage(e.target.value)}
-				/>
-				<Button>Add</Button>
-			</form>
-			<Button>Add friend</Button>
+			{isOpen && (
+				<form className='form-add-friend' onSubmit={handleSubmit}>
+					<label htmlFor='name'>🤷‍♀️ Friend name</label>
+					<input
+						id='name'
+						type='text'
+						placeholder='Add name...'
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+					<label htmlFor='image'>🌄 Image URL</label>
+					<input
+						id='image'
+						type='text'
+						placeholder='Add url...'
+						value={image}
+						onChange={(e) => setImage(e.target.value)}
+					/>
+					<Button>Add</Button>
+				</form>
+			)}
+			<Button onClick={handleToggle}>{isOpen ? 'Close' : 'Add friend'}</Button>
 		</>
 	);
 };
 
-// const FormSplitBill = () => {
-// 	return <form className='form-split-bill'>{/* h2(Title), labels, inputs, selects, Button */}</form>;
-// };
+const FormSplitBill = () => {
+	return <form className='form-split-bill'>form here{/* h2(Title), labels, inputs, selects, Button */}</form>;
+};
 
 const App = () => {
 	const [items, setItems] = useState(initialFriends);
@@ -113,10 +128,8 @@ const App = () => {
 			<div className='sidebar'>
 				<FriendsList items={items} />
 				<FormAddFriend onAdd={addFriend} />
-				{/* Button here */}
 			</div>
-			FormBillSplit
-			{/* FormSplitBill here */}
+			<FormSplitBill />
 		</div>
 	);
 };
