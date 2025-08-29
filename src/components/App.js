@@ -113,7 +113,52 @@ const FormAddFriend = ({ onAdd }) => {
 };
 
 const FormSplitBill = () => {
-	return <form className='form-split-bill'>form here{/* h2(Title), labels, inputs, selects, Button */}</form>;
+	const [bill, setBill] = useState('');
+	const [expense1, setExpense1] = useState('');
+	const [expense2, setExpense2] = useState('');
+	const [payee, setPayee] = useState('');
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		console.log('submitted!');
+	};
+
+	return (
+		<form className='form-split-bill' onSubmit={handleSubmit}>
+			<h2>Split a Bill with $NAME</h2>
+			<label htmlFor='billValue'>💰 Bill value</label>
+			<input
+				id='billValue'
+				type='text'
+				placeholder='Bill amt...'
+				value={bill}
+				onChange={(e) => setBill(e.target.value)}
+			/>
+			<label htmlFor='expense1'>🧍‍♂️ Your expense</label>
+			<input
+				id='expense1'
+				type='text'
+				placeholder='Your amt...'
+				value={expense1}
+				onChange={(e) => setExpense1(e.target.value)}
+			/>
+			<label htmlFor='expense2'>👬 $NAME's expense</label>
+			<input
+				id='expense2'
+				type='text'
+				placeholder='Their amt...'
+				value={expense2}
+				onChange={(e) => setExpense2(e.target.value)}
+			/>
+			<label htmlFor='payee'>🤮 Who is paying the bill?</label>
+			<select id='payee' value={payee} onChange={(e) => setPayee(e.target.value)}>
+				<option value='you'>You</option>
+				<option value='them'>$NAME</option>
+			</select>
+			<Button>Split bill</Button>
+		</form>
+	);
 };
 
 const App = () => {
