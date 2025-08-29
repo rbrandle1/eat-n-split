@@ -1,8 +1,4 @@
 import { useState } from 'react';
-import { FriendsList } from './FriendsList';
-import { BillForm } from './BillForm';
-
-// ! Need to make a specific handler function to setSelected instead of just tapping right into it. Video 100 @6min. This somehow gets around needing to write that "get selected" function I wrote by passing the entire object down into the billForm as well as deeper into the item.
 
 const initialFriends = [
 	{
@@ -25,24 +21,40 @@ const initialFriends = [
 	},
 ];
 
+const Button = () => {
+	return <button className='button'>button</button>;
+};
+
+const FriendsList = () => {
+	return <ul>{/* Friend here */}</ul>;
+};
+
+const Friend = () => {
+	return (
+		// each li has img, h3 (name), p (balance owed), Button
+		// add ".selected" class to li
+		// add "red/green" classes to p
+		<li>{/* Friend here */}</li>
+	);
+};
+
+const FormAddFriend = () => {
+	return <form className='form-add-friend'>{/* labels, inputs, Button */}</form>;
+};
+
+const FormSplitBill = () => {
+	return <form className='form-split-bill'>{/* h2(Title), labels, inputs, selects, Button */}</form>;
+};
+
 const App = () => {
-	// ? Do I really need to pass the entire items object down into BillForm? Or just the .name and .id?
-	//! no! see note above
-	const [items, setItems] = useState(initialFriends);
-	const [selected, setSelected] = useState(null);
-
-	const handleBalance = (newBalance) => {
-		setItems(items.map((el) => (el.id === selected ? { ...el, balance: newBalance } : el)));
-	};
-
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				<FriendsList onToggleBill={setSelected} selected={selected} items={items} onAddItem={setItems} />
+				{/* FriendsList ul here, Friend li subcomponent */}
+				{/* FormAddFriend here */}
+				{/* Button here */}
 			</div>
-			{selected && (
-				<BillForm items={items} selected={selected} onSetBalance={handleBalance} onToggleBill={setSelected} />
-			)}
+			{/* FormSplitBill here */}
 		</div>
 	);
 };
