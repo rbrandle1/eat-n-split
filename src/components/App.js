@@ -21,22 +21,30 @@ const initialFriends = [
 	},
 ];
 
-// const Button = () => {
-// 	return <button className='button'>button</button>;
-// };
+const Button = ({ children }) => {
+	return <button className='button'>{children}</button>;
+};
 
-// const FriendsList = () => {
-// 	return <ul>{/* Friend here */}</ul>;
-// };
+const FriendsList = () => {
+	return (
+		<ul>
+			<Friend />
+		</ul>
+	);
+};
 
-// const Friend = () => {
-// 	return (
-// 		// each li has img, h3 (name), p (balance owed), Button
-// 		// add ".selected" class to li
-// 		// add "red/green" classes to p
-// 		<li>{/* Friend here */}</li>
-// 	);
-// };
+const Friend = () => {
+	return (
+		// add ".selected" class to li
+		// add "red/green" classes to p
+		<li>
+			<img src='' alt="Friend's name" />
+			<h3>Friend Name</h3>
+			<p>balance owed text</p>
+			<Button>Select</Button>
+		</li>
+	);
+};
 
 // const FormAddFriend = () => {
 // 	return <form className='form-add-friend'>{/* labels, inputs, Button */}</form>;
@@ -50,7 +58,7 @@ const App = () => {
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				Sidebar
+				<FriendsList />
 				{/* FriendsList ul here, Friend li subcomponent */}
 				{/* FormAddFriend here */}
 				{/* Button here */}
