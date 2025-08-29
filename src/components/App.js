@@ -38,13 +38,13 @@ const initialFriends = [
 // 	);
 // };
 
-const FormAddFriend = () => {
-	// TIP: for random image generation, set a default useState to: 'https://i.pravatar.cc/48'
-	// Create a random id variable like: const id = crypto.randomUUID();
-	// Then, when constructing the new friend object, you can piece the two together like" image: `${image}?=${id}`
+// const FormAddFriend = () => {
+// 	// TIP: for random image generation, set a default useState to: 'https://i.pravatar.cc/48'
+// 	// Create a random id variable like: const id = crypto.randomUUID();
+// 	// Then, when constructing the new friend object, you can piece the two together like" image: `${image}?=${id}`
 
-	return <form className='form-add-friend'>{/* labels, inputs, Button */}</form>;
-};
+// 	return <form className='form-add-friend'>{/* labels, inputs, Button */}</form>;
+// };
 
 // const FormSplitBill = () => {
 // 	return <form className='form-split-bill'>{/* h2(Title), labels, inputs, selects, Button */}</form>;
