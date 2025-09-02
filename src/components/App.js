@@ -25,18 +25,22 @@ const initialFriends = [
 // 	return <button className='button'>button</button>;
 // };
 
-// const FriendsList = () => {
-// 	return <ul>{/* Friend here */}</ul>;
-// };
+const FriendsList = () => {
+	return (
+		<ul>
+			<Friend />
+		</ul>
+	);
+};
 
-// const Friend = () => {
-// 	return (
-// 		// each li has img, h3 (name), p (balance owed), Button
-// 		// add ".selected" class to li
-// 		// add "red/green" classes to p
-// 		<li>{/* Friend here */}</li>
-// 	);
-// };
+const Friend = () => {
+	return (
+		// each li has img, h3 (name), p (balance owed), Button
+		// add ".selected" class to li
+		// add "red/green" classes to p
+		<li>{/* Friend here */}</li>
+	);
+};
 
 // const FormAddFriend = () => {
 // 	// TIP: for random image generation, set a default useState to: 'https://i.pravatar.cc/48'
@@ -54,12 +58,10 @@ const App = () => {
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				Sidebar
-				{/* FriendsList ul here, Friend li subcomponent */}
+				<FriendsList />
 				{/* FormAddFriend here */}
 				{/* Button here */}
 			</div>
-			FormBillSplit
 			{/* FormSplitBill here */}
 		</div>
 	);
