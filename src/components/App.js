@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 /**
  * ! Work on the following
- * When multiple properties in the data object need to know if the data is "selected" or not, think of creating a full selected version of the object, not just searching for an applicable id. So you'll have the usual mapped data object, and then you can compare with the 'selected' object.
- * Try to understand the mathematics portion of calculating these tips... These values are not just derived from a single 'difference'. You need to know the bill, paidByUser, paidByFriend, and whoIsPaying.
+ * When multiple properties in the data object need to know if the data is "selected" or not, think of creating a full selected version of the object, not just searching for an applicable id. So you'll have the usual mapped data object, and then you can compare with the passed down 'selected' object.
+ * Try to understand the mathematics portion of calculating the split... These values are not just derived from a single 'difference'. You need to know the bill, paidByUser, paidByFriend (derived), and whoIsPaying.
  * Keep the "Add Friend" button out of the form. It should be used as a simple toggle to open and close the form, not be included as in 'add' form component.
  * Make sure inputs are the correct type, not all 'text'.
  */
@@ -117,6 +117,7 @@ const FormSplitBill = ({ setBalance, selected }) => {
 		e.preventDefault();
 
 		if (!bill || !paidByUser) return;
+		// ANSWER: So anything that was paid by you will be a NEGATIVE towards the friend balance. Anything that was paidByFriend will be a positive towards the balance.
 		setBalance(who === 'user' ? paidByFriend : -paidByUser);
 	};
 
@@ -137,7 +138,8 @@ const FormSplitBill = ({ setBalance, selected }) => {
 				type='number'
 				placeholder='Expense...'
 				value={paidByUser}
-				// I don't understand this part... does this simply handle the 0?
+				// I don't understand this part... does this simply handle the 0?;
+				// ANSWER: This is a way to make sure you can't enter a number higher than the bill. So if the target.value is higher than the bill, then just reset it back to the current value={paidByUser}... meaning don't do anything with it. Otherwise type away.
 				onChange={(e) => setPaidByUser(Number(e.target.value) > bill ? paidByUser : Number(e.target.value))}
 			/>
 			<label htmlFor='expense2'>👬 {selected.name}'s expense</label>
@@ -173,6 +175,7 @@ const App = () => {
 
 	const handleBalance = (difference) => {
 		setItems((items) => items.map((el) => (el.id === selected.id ? { ...el, balance: el.balance + difference } : el)));
+		// this resets the form so state doesn't persist into the next selected friend.
 		setSelected(null);
 	};
 
