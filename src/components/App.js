@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const initialFriends = [
+const data = [
 	{
 		id: 118836,
 		name: 'Clark',
@@ -21,24 +21,43 @@ const initialFriends = [
 	},
 ];
 
-// const Button = () => {
-// 	return <button className='button'>button</button>;
-// };
+const getData = () => (typeof data !== 'undefined' ? data : []);
 
-const FriendsList = () => {
+const initialFriends = getData();
+
+const Button = ({ children }) => {
+	return <button className='button'>{children}</button>;
+};
+
+const FriendsList = ({ friends }) => {
 	return (
 		<ul>
-			<Friend />
+			{friends.map((friend) => (
+				<Friend key={friend.id} friend={friend} />
+			))}
 		</ul>
 	);
 };
 
-const Friend = () => {
+const Friend = ({ friend }) => {
 	return (
-		// each li has img, h3 (name), p (balance owed), Button
 		// add ".selected" class to li
-		// add "red/green" classes to p
-		<li>{/* Friend here */}</li>
+		<li>
+			<img src={friend.image} alt={`${friend.name}'s Avatar`} />
+			<h3>{friend.name}</h3>
+			{friend.balance === 0 && <p>You and {friend.name} are even</p>}
+			{friend.balance < 0 && (
+				<p className='red'>
+					You owe {friend.name} ${Math.abs(friend.balance)}
+				</p>
+			)}
+			{friend.balance > 0 && (
+				<p className='green'>
+					{friend.name} owes you ${friend.balance}
+				</p>
+			)}
+			<Button>Select</Button>
+		</li>
 	);
 };
 
@@ -55,10 +74,16 @@ const Friend = () => {
 // };
 
 const App = () => {
+	const [friends, setFriends] = useState(initialFriends);
+
+	const handleAddFriend = () => {
+		console.log('added');
+	};
+
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				<FriendsList />
+				<FriendsList friends={friends} onAddFriend={handleAddFriend} />
 				{/* FormAddFriend here */}
 				{/* Button here */}
 			</div>
