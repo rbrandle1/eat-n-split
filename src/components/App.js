@@ -5,6 +5,7 @@ import { useState } from 'react';
  * When multiple properties in the data object need to know if the data is "selected" or not, think of creating a full selected version of the object, not just searching for an applicable id. So you'll have the usual mapped data object, and then you can compare with the 'selected' object.
  * Try to understand the mathematics portion of calculating these tips... These values are not just derived from a single 'difference'. You need to know the bill, paidByUser, paidByFriend, and whoIsPaying.
  * Keep the "Add Friend" button out of the form. It should be used as a simple toggle to open and close the form, not be included as in 'add' form component.
+ * Make sure inputs are the correct type, not all 'text'.
  */
 
 const initialFriends = [
