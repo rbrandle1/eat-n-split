@@ -1,10 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 /**
  * GO ALL OUT
  * ! add data fallback / add friends
- * ! add placeholders
- * ! add disabled states to buttons
  * ! ensure accessibility best practices
  */
 
@@ -29,9 +27,9 @@ const initialFriends = [
 	},
 ];
 
-const Button = ({ children, onClick }) => {
+const Button = ({ children, onClick, disabled }) => {
 	return (
-		<button className='button' onClick={onClick}>
+		<button className='button' onClick={onClick} disabled={disabled}>
 			{children}
 		</button>
 	);
@@ -98,10 +96,10 @@ const FormAddFriend = ({ onAdd }) => {
 	return (
 		<form className='form-add-friend' onSubmit={handleSubmit}>
 			<label htmlFor='name'>🤷‍♀️ Friend name</label>
-			<input id='name' type='text' value={name} onChange={(e) => setName(e.target.value)} />
+			<input id='name' type='text' placeholder='Name...' value={name} onChange={(e) => setName(e.target.value)} />
 			<label htmlFor='img'>🌄 Image URL</label>
-			<input id='img' type='text' value={image} onChange={(e) => setImage(e.target.value)} />
-			<Button>Add</Button>
+			<input id='img' type='text' placeholder='Image...' value={image} onChange={(e) => setImage(e.target.value)} />
+			<Button disabled={!name || !image}>Add</Button>
 		</form>
 	);
 };
@@ -111,6 +109,14 @@ const FormSplitBill = ({ selected, onSplit }) => {
 	const [userPaid, setUserPaid] = useState('');
 	const friendPaid = bill ? bill - userPaid : '';
 	const [whoPaid, setWhoPaid] = useState('user');
+
+	const inputRef = useRef(null);
+
+	useEffect(() => {
+		if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [selected]);
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -126,12 +132,20 @@ const FormSplitBill = ({ selected, onSplit }) => {
 		<form className='form-split-bill' onSubmit={handleSubmit}>
 			<h2>Split a bill with {selected.name}</h2>
 			<label htmlFor='bill'>💵 Bill value</label>
-			<input id='bill' type='number' value={bill} onChange={(e) => setBill(Number(e.target.value))} />
+			<input
+				ref={inputRef}
+				id='bill'
+				type='number'
+				placeholder='0.00'
+				value={bill}
+				onChange={(e) => setBill(Number(e.target.value) < 0 ? bill : Number(e.target.value))}
+			/>
 			<label htmlFor='userPaid'>🤷 Your expense</label>
 			<input
 				id='userPaid'
 				type='number'
 				value={userPaid}
+				placeholder='0.00'
 				onChange={(e) =>
 					setUserPaid(Number(e.target.value) > bill || Number(e.target.value) < 0 ? userPaid : Number(e.target.value))
 				}
@@ -143,7 +157,7 @@ const FormSplitBill = ({ selected, onSplit }) => {
 				<option value='user'>You</option>
 				<option value='friend'>{selected.name}</option>
 			</select>
-			<Button>Split Bill</Button>
+			<Button disabled={!bill || !userPaid}>Split Bill</Button>
 		</form>
 	);
 };
@@ -181,7 +195,7 @@ const App = () => {
 			<div className='sidebar'>
 				<FriendsList friends={friends} onSelect={handleSelect} selected={selectedFriend} />
 				{showAdd && <FormAddFriend onAdd={handleAdd} />}
-				<Button onClick={handleToggle}>{showAdd ? 'Close' : 'Add friend'}</Button>
+				<Button onClick={handleToggle}>{showAdd ? 'Close' : `\u002B Add Friend`}</Button>
 			</div>
 			{selectedFriend && <FormSplitBill selected={selectedFriend} onSplit={handleSplitBill} />}
 		</div>
