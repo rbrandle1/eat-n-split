@@ -1,28 +1,11 @@
-import { useState } from 'react';
-import AddForm from './AddForm';
-import FriendItem from './FriendItem';
-import Button from './Button';
+import { Friend } from './Friend';
 
-export const FriendsList = ({ items, onAddItem, onToggleBill, selected }) => {
-	const [addOpen, setAddOpen] = useState(false);
-
-	const handleToggleAdd = () => setAddOpen((is) => !is);
-
-	const handleAddItem = (newItem) => {
-		onAddItem([...items, newItem]);
-		setAddOpen((is) => !is);
-	};
-
+export const FriendsList = ({ friends, onSelect, selected }) => {
 	return (
-		<>
-			<ul>
-				{items.map((friend) => (
-					<FriendItem key={friend.id} data={friend} onToggle={onToggleBill} selected={selected} />
-				))}
-			</ul>
-			{addOpen && <AddForm onAdd={handleAddItem} />}
-			<Button onClick={handleToggleAdd}>{addOpen ? 'Close' : 'Add friend'}</Button>
-		</>
+		<ul>
+			{friends.map((friend) => (
+				<Friend key={friend.id} friend={friend} onSelect={onSelect} selected={selected} />
+			))}
+		</ul>
 	);
 };
-export default FriendsList;

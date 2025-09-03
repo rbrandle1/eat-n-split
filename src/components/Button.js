@@ -5,4 +5,3 @@ export const Button = ({ children, onClick, disabled }) => {
 		</button>
 	);
 };
-export default Button;
