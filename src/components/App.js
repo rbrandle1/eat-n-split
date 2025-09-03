@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+// todo: hook up form to pass in selected
+// todo: hook up form controls
+// todo: hook up split bill balance
+
 const data = [
 	{
 		id: 118836,
@@ -33,20 +37,22 @@ const Button = ({ children, onClick }) => {
 	);
 };
 
-const FriendsList = ({ friends }) => {
+const FriendsList = ({ friends, selectedFriend, onSelect }) => {
 	return (
 		<ul>
 			{friends.map((friend) => (
-				<Friend key={friend.id} friend={friend} />
+				<Friend key={friend.id} friend={friend} selectedFriend={selectedFriend} onSelect={onSelect} />
 			))}
 		</ul>
 	);
 };
 
-const Friend = ({ friend }) => {
+const Friend = ({ friend, selectedFriend, onSelect }) => {
+	// need some way to optional chain to handle null
+	const selected = selectedFriend?.id === friend.id;
+
 	return (
-		// add ".selected" class to li
-		<li>
+		<li className={selected ? 'selected' : ''}>
 			<img src={friend.image} alt={`${friend.name}'s Avatar`} />
 			<h3>{friend.name}</h3>
 			{friend.balance === 0 && <p>You and {friend.name} are even</p>}
@@ -60,7 +66,7 @@ const Friend = ({ friend }) => {
 					{friend.name} owes you ${friend.balance}
 				</p>
 			)}
-			<Button>Select</Button>
+			<Button onClick={() => onSelect(friend)}>Select</Button>
 		</li>
 	);
 };
@@ -105,6 +111,7 @@ const FormAddFriend = ({ onAdd }) => {
 
 const App = () => {
 	const [friends, setFriends] = useState(initialFriends);
+	const [selectedFriend, setSelectedFriend] = useState(null);
 	const [showAddFriend, setShowAddFriend] = useState(false);
 
 	const handleToggle = () => {
@@ -116,10 +123,15 @@ const App = () => {
 		setShowAddFriend(false);
 	};
 
+	const handleSelectedFriend = (friend) => {
+		setSelectedFriend((cur) => (cur?.friend === selectedFriend ? null : friend));
+		console.log(selectedFriend);
+	};
+
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				<FriendsList friends={friends} />
+				<FriendsList friends={friends} selectedFriend={selectedFriend} onSelect={handleSelectedFriend} />
 				{showAddFriend && <FormAddFriend onAdd={handleAdd} />}
 				<Button onClick={handleToggle}>{showAddFriend ? 'Close' : 'Add friend'}</Button>
 			</div>
