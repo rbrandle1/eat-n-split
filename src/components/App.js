@@ -21,9 +21,9 @@ const initialFriends = [
 	},
 ];
 
-// const Button = () => {
-// 	return <button className='button'>button</button>;
-// };
+const Button = () => {
+	return <button className='button'>button</button>;
+};
 
 const FriendsList = () => {
 	return (
@@ -35,10 +35,14 @@ const FriendsList = () => {
 
 const Friend = () => {
 	return (
-		// each li has img, h3 (name), p (balance owed), Button
 		// add ".selected" class to li
 		// add "red/green" classes to p
-		<li>{/* Friend here */}</li>
+		<li>
+			<img src='' alt='' />
+			<h3>Name</h3>
+			<p>balance owed</p>
+			<Button>Select</Button>
+		</li>
 	);
 };
 
@@ -47,11 +51,24 @@ const Friend = () => {
 // 	// Create a random id variable like: const id = crypto.randomUUID();
 // 	// Then, when constructing the new friend object, you can piece the two together like" image: `${image}?=${id}`
 
-// 	return <form className='form-add-friend'>{/* labels, inputs, Button */}</form>;
+// 	return (
+// 		<form className='form-add-friend'>
+// 			<label for=''></label>
+// 			<input type='text' />
+// 			<Button>Add</Button>
+// 		</form>
+// 	);
 // };
 
 // const FormSplitBill = () => {
-// 	return <form className='form-split-bill'>{/* h2(Title), labels, inputs, selects, Button */}</form>;
+// 	return (
+// 	<form className='form-split-bill'>
+// 	<h2>Title</h2>
+// 	<label for=""></label>
+// 	<input type="text" />
+// 	<Button>Split Bill</Button>
+// 	</form>
+// 	);
 // };
 
 const App = () => {
