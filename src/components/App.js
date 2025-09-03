@@ -1,5 +1,12 @@
 import { useState } from 'react';
 
+/**
+ * THINGS TO NOTE
+ * Remember optional chaining to avoid initial null states. Useful when created the selectedFriend object.
+ * Anything the user pays will have the friendPaid value added to the balance. Otherwise it is subtracted.
+ * Be sure to prevent the target values from exceeding the bill or being lower than 0. Can be done in onChange prop.
+ */
+
 const initialFriends = [
 	{
 		id: 118836,
@@ -53,8 +60,8 @@ const Friend = () => {
 
 // 	return (
 // 		<form className='form-add-friend'>
-// 			<label for=''></label>
-// 			<input type='text' />
+// 			<label htmlFor=''></label>
+// 			<input id='' type='text' placeholder=''/>
 // 			<Button>Add</Button>
 // 		</form>
 // 	);
@@ -64,8 +71,8 @@ const Friend = () => {
 // 	return (
 // 	<form className='form-split-bill'>
 // 	<h2>Title</h2>
-// 	<label for=""></label>
-// 	<input type="text" />
+// 	<label htmlFor=""></label>
+// 	<input id='' type="text" />
 // 	<Button>Split Bill</Button>
 // 	</form>
 // 	);
@@ -76,10 +83,10 @@ const App = () => {
 		<div className='app'>
 			<div className='sidebar'>
 				<FriendsList />
-				{/* FormAddFriend here */}
-				{/* Button here */}
+				{/* <FormAddFriend /> */}
+				{/* <Button /> */}
 			</div>
-			{/* FormSplitBill here */}
+			{/* <FormSplitBill /> */}
 		</div>
 	);
 };
