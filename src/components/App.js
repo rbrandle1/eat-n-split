@@ -21,44 +21,82 @@ const initialFriends = [
 	},
 ];
 
-const Button = () => {
-	return <button className='button'>button</button>;
+const Button = ({ children, onClick }) => {
+	return (
+		<button className='button' onClick={onClick}>
+			{children}
+		</button>
+	);
 };
 
-const FriendsList = () => {
+const FriendsList = ({ friends, onSelect, selected }) => {
 	return (
 		<ul>
-			<Friend />
+			{friends.map((friend) => (
+				<Friend key={friend.id} friend={friend} onSelect={onSelect} selected={selected} />
+			))}
 		</ul>
 	);
 };
 
-const Friend = () => {
+const Friend = ({ friend, onSelect, selected }) => {
+	const isSelected = selected?.id === friend.id;
+
 	return (
-		// add ".selected" class to li
-		// add "red/green" classes to p
-		<li>
-			<img src='' alt='' />
-			<h3>Name</h3>
-			<p>balance owed</p>
-			<Button>Select</Button>
+		<li className={isSelected ? 'selected' : ''}>
+			<img src={friend.image} alt={`${friend.name}'s avatar`} />
+			<h3>{friend.name}</h3>
+			{friend.balance < 0 && (
+				<p className='red'>
+					You owe {friend.name} ${Math.abs(friend.balance)}
+				</p>
+			)}
+			{friend.balance > 0 && (
+				<p className='green'>
+					{friend.name} owes you ${friend.balance}
+				</p>
+			)}
+			{friend.balance === 0 && <p>You and {friend.name} are even</p>}
+			<Button onClick={() => onSelect(friend)}>Select</Button>
 		</li>
 	);
 };
 
-// const FormAddFriend = () => {
-// 	// TIP: for random image generation, set a default useState to: 'https://i.pravatar.cc/48'
-// 	// Create a random id variable like: const id = crypto.randomUUID();
-// 	// Then, when constructing the new friend object, you can piece the two together like" image: `${image}?=${id}`
+const FormAddFriend = ({ onAdd }) => {
+	const IMG_BASE = 'https://i.pravatar.cc/48';
 
-// 	return (
-// 		<form className='form-add-friend'>
-// 			<label for=''></label>
-// 			<input type='text' />
-// 			<Button>Add</Button>
-// 		</form>
-// 	);
-// };
+	const [name, setName] = useState('');
+	const [image, setImage] = useState(IMG_BASE);
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (!name || !image) return;
+
+		const id = crypto.randomUUID();
+
+		const newFriend = {
+			id,
+			name,
+			image: `${IMG_BASE}?=${id}`,
+			balance: 0,
+		};
+
+		onAdd(newFriend);
+		setName('');
+		setImage('');
+	};
+
+	return (
+		<form className='form-add-friend' onSubmit={handleSubmit}>
+			<label htmlFor='name'>🤷‍♀️ Friend name</label>
+			<input id='name' type='text' value={name} onChange={(e) => setName(e.target.value)} />
+			<label htmlFor='img'>🌄 Image URL</label>
+			<input id='img' type='text' value={image} onChange={(e) => setImage(e.target.value)} />
+			<Button>Add</Button>
+		</form>
+	);
+};
 
 // const FormSplitBill = () => {
 // 	return (
@@ -72,12 +110,30 @@ const Friend = () => {
 // };
 
 const App = () => {
+	const [friends, setFriends] = useState(initialFriends);
+	const [selectedFriend, setSelectedFriend] = useState(null);
+	const [showAdd, setShowAdd] = useState(false);
+
+	const handleToggle = () => {
+		setShowAdd((is) => !is);
+	};
+
+	const handleAdd = (friend) => {
+		setFriends((friends) => [...friends, friend]);
+		setShowAdd(false);
+	};
+
+	const handleSelect = (friendObj) => {
+		setSelectedFriend((cur) => (cur?.id !== friendObj.id ? friendObj : null));
+		setShowAdd(false);
+	};
+
 	return (
 		<div className='app'>
 			<div className='sidebar'>
-				<FriendsList />
-				{/* FormAddFriend here */}
-				{/* Button here */}
+				<FriendsList friends={friends} onSelect={handleSelect} selected={selectedFriend} />
+				{showAdd && <FormAddFriend onAdd={handleAdd} />}
+				<Button onClick={handleToggle}>{showAdd ? 'Close' : 'Add friend'}</Button>
 			</div>
 			{/* FormSplitBill here */}
 		</div>
