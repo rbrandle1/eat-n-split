@@ -1,9 +1,5 @@
 import { useState } from 'react';
 
-// todo: hook up form to pass in selected
-// todo: hook up form controls
-// todo: hook up split bill balance
-
 const data = [
 	{
 		id: 118836,
@@ -66,7 +62,7 @@ const Friend = ({ friend, selectedFriend, onSelect }) => {
 					{friend.name} owes you ${friend.balance}
 				</p>
 			)}
-			<Button onClick={() => onSelect(friend)}>Select</Button>
+			<Button onClick={() => onSelect(friend)}>{selected ? 'Close' : 'Select'}</Button>
 		</li>
 	);
 };
@@ -105,7 +101,7 @@ const FormAddFriend = ({ onAdd }) => {
 	);
 };
 
-const FormSplitBill = ({ selectedFriend }) => {
+const FormSplitBill = ({ selectedFriend, splitBill }) => {
 	const [bill, setBill] = useState('');
 	const [userPaid, setUserPaid] = useState('');
 	const friendPaid = bill ? bill - userPaid : '';
@@ -114,8 +110,9 @@ const FormSplitBill = ({ selectedFriend }) => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		//need to pass up the balance...
-		//setBalance, or splitBill
+		const balance = whoPaid === 'user' ? friendPaid : -userPaid;
+
+		splitBill(Number(balance));
 	};
 
 	return (
@@ -154,6 +151,16 @@ const App = () => {
 	const handleSelectedFriend = (friend) => {
 		// WORK ON THIS
 		setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
+		setShowAddFriend(false);
+	};
+
+	const handleSplitBill = (number) => {
+		setFriends((friends) =>
+			friends.map((friend) =>
+				friend.id === selectedFriend.id ? { ...friend, balance: friend.balance + number } : friend,
+			),
+		);
+		setSelectedFriend(null);
 	};
 
 	return (
@@ -163,7 +170,7 @@ const App = () => {
 				{showAddFriend && <FormAddFriend onAdd={handleAdd} />}
 				<Button onClick={handleToggle}>{showAddFriend ? 'Close' : 'Add friend'}</Button>
 			</div>
-			{selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
+			{selectedFriend && <FormSplitBill selectedFriend={selectedFriend} splitBill={handleSplitBill} />}
 		</div>
 	);
 };
