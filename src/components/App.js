@@ -1,5 +1,13 @@
 import { useState } from 'react';
 
+/**
+ * GO ALL OUT
+ * ! add data fallback / add friends
+ * ! add placeholders
+ * ! add disabled states to buttons
+ * ! ensure accessibility best practices
+ */
+
 const initialFriends = [
 	{
 		id: 118836,
@@ -57,7 +65,7 @@ const Friend = ({ friend, onSelect, selected }) => {
 				</p>
 			)}
 			{friend.balance === 0 && <p>You and {friend.name} are even</p>}
-			<Button onClick={() => onSelect(friend)}>Select</Button>
+			<Button onClick={() => onSelect(friend)}>{isSelected ? 'Close' : 'Select'}</Button>
 		</li>
 	);
 };
@@ -98,13 +106,24 @@ const FormAddFriend = ({ onAdd }) => {
 	);
 };
 
-const FormSplitBill = ({ selected }) => {
+const FormSplitBill = ({ selected, onSplit }) => {
 	const [bill, setBill] = useState('');
 	const [userPaid, setUserPaid] = useState('');
 	const friendPaid = bill ? bill - userPaid : '';
-	const [whoPaid, setWhoPaid] = useState('');
+	const [whoPaid, setWhoPaid] = useState('user');
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (!bill || !userPaid) return;
+
+		const balance = whoPaid === 'user' ? friendPaid : -userPaid;
+
+		onSplit(balance);
+	};
+
 	return (
-		<form className='form-split-bill'>
+		<form className='form-split-bill' onSubmit={handleSubmit}>
 			<h2>Split a bill with {selected.name}</h2>
 			<label htmlFor='bill'>💵 Bill value</label>
 			<input id='bill' type='number' value={bill} onChange={(e) => setBill(Number(e.target.value))} />
@@ -113,7 +132,9 @@ const FormSplitBill = ({ selected }) => {
 				id='userPaid'
 				type='number'
 				value={userPaid}
-				onChange={(e) => setUserPaid(Number(e.target.value) > bill ? userPaid : Number(e.target.value))}
+				onChange={(e) =>
+					setUserPaid(Number(e.target.value) > bill || Number(e.target.value) < 0 ? userPaid : Number(e.target.value))
+				}
 			/>
 			<label htmlFor='friendPaid'>🤷‍♀️ {selected.name}'s expense</label>
 			<input id='friendPaid' type='number' value={friendPaid} disabled />
@@ -141,9 +162,18 @@ const App = () => {
 		setShowAdd(false);
 	};
 
-	const handleSelect = (friendObj) => {
-		setSelectedFriend((cur) => (cur?.id !== friendObj.id ? friendObj : null));
+	const handleSelect = (friend) => {
+		setSelectedFriend((cur) => (cur?.id !== friend.id ? friend : null));
 		setShowAdd(false);
+	};
+
+	const handleSplitBill = (balance) => {
+		setFriends((friends) =>
+			friends.map((friend) =>
+				friend.id === selectedFriend.id ? { ...friend, balance: selectedFriend.balance + balance } : friend,
+			),
+		);
+		setSelectedFriend(null);
 	};
 
 	return (
@@ -153,7 +183,7 @@ const App = () => {
 				{showAdd && <FormAddFriend onAdd={handleAdd} />}
 				<Button onClick={handleToggle}>{showAdd ? 'Close' : 'Add friend'}</Button>
 			</div>
-			{selectedFriend && <FormSplitBill selected={selectedFriend} />}
+			{selectedFriend && <FormSplitBill selected={selectedFriend} onSplit={handleSplitBill} />}
 		</div>
 	);
 };
