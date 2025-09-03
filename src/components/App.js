@@ -48,7 +48,7 @@ const FriendsList = ({ friends, selectedFriend, onSelect }) => {
 };
 
 const Friend = ({ friend, selectedFriend, onSelect }) => {
-	// need some way to optional chain to handle null
+	// WORK ON THIS
 	const selected = selectedFriend?.id === friend.id;
 
 	return (
@@ -105,9 +105,37 @@ const FormAddFriend = ({ onAdd }) => {
 	);
 };
 
-// const FormSplitBill = () => {
-// 	return <form className='form-split-bill'>{/* h2(Title), labels, inputs, selects, Button */}</form>;
-// };
+const FormSplitBill = ({ selectedFriend }) => {
+	const [bill, setBill] = useState('');
+	const [userPaid, setUserPaid] = useState('');
+	const friendPaid = bill ? bill - userPaid : '';
+	const [whoPaid, setWhoPaid] = useState('user');
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		//need to pass up the balance...
+		//setBalance, or splitBill
+	};
+
+	return (
+		<form className='form-split-bill' onSubmit={handleSubmit}>
+			<h2>Split a bill with {selectedFriend?.name}</h2>
+			<label htmlFor='bill'>💵 Bill value</label>
+			<input id='bill' type='text' value={bill} onChange={(e) => setBill(Number(e.target.value))} />
+			<label htmlFor='userPaid'>🤷 Your expense</label>
+			<input id='userPaid' type='text' value={userPaid} onChange={(e) => setUserPaid(Number(e.target.value))} />
+			<label htmlFor='friendPaid'>👬 {selectedFriend?.name}'s expense</label>
+			<input id='friendPaid' type='text' value={friendPaid} disabled />
+			<label htmlFor='whoPaid'>🤑 Who is paying the bill?</label>
+			<select id='whoPaid' value={whoPaid} onChange={(e) => setWhoPaid(e.target.value)}>
+				<option value='user'>You</option>
+				<option value='friend'>{selectedFriend?.name}</option>
+			</select>
+			<Button>Split Bill</Button>
+		</form>
+	);
+};
 
 const App = () => {
 	const [friends, setFriends] = useState(initialFriends);
@@ -124,10 +152,8 @@ const App = () => {
 	};
 
 	const handleSelectedFriend = (friend) => {
-		// 1st there is no selectedFriend, so need to do that
-		// setSelectedFriend((cur) => (cur?.id === selectedFriend ? null : friend));
-		setSelectedFriend((cur) => (cur?.id !== null ? friend : null));
-		console.log(selectedFriend);
+		// WORK ON THIS
+		setSelectedFriend((cur) => (cur?.id === friend.id ? null : friend));
 	};
 
 	return (
@@ -137,7 +163,7 @@ const App = () => {
 				{showAddFriend && <FormAddFriend onAdd={handleAdd} />}
 				<Button onClick={handleToggle}>{showAddFriend ? 'Close' : 'Add friend'}</Button>
 			</div>
-			{/* FormSplitBill here */}
+			{selectedFriend && <FormSplitBill selectedFriend={selectedFriend} />}
 		</div>
 	);
 };
