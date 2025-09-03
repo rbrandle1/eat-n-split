@@ -118,13 +118,15 @@ const App = () => {
 		setShowAddFriend((show) => !show);
 	};
 
-	const handleAdd = (newFriend) => {
-		setFriends((friends) => [...friends, newFriend]);
+	const handleAdd = (friend) => {
+		setFriends((friends) => [...friends, friend]);
 		setShowAddFriend(false);
 	};
 
 	const handleSelectedFriend = (friend) => {
-		setSelectedFriend((cur) => (cur?.friend === selectedFriend ? null : friend));
+		// 1st there is no selectedFriend, so need to do that
+		// setSelectedFriend((cur) => (cur?.id === selectedFriend ? null : friend));
+		setSelectedFriend((cur) => (cur?.id !== null ? friend : null));
 		console.log(selectedFriend);
 	};
 
